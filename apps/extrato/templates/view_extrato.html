@@ -1,0 +1,62 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block 'head' %}
+
+<link href="{% static 'extrato/css/extrato.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block 'body' %}
+<br>
+<br>
+<div class='container'>
+    <form action="{% url 'extrato' %}" method="GET">
+        <div class="row">
+
+            <div class="col-md">
+                <label>Conta</label>
+                <select name="conta" class="form-select">
+                    {% for conta in contas %}
+                    <option value="{{conta.id}}">{{conta}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md">
+                <label>Categoria</label>
+                <select name="categoria" class="form-select">
+                    {% for categoria in categorias %}
+                    <option value="{{categoria.id}}">{{categoria}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md">
+                <label>Período</label>
+                <select name="periodo" class="form-select">
+                    <option>Últimos 7 dias</option>
+                </select>
+            </div>
+
+
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-2">
+                <input style="width: 100%" type="submit" class="botao-principal" value="Filtrar">
+            </div>
+            <div class="col-md-2">
+                <a href="{% url 'extrato' %}" class="botao-secundario">Limpar filtro</a>
+            </div>
+            <div class="col-md-2">
+                <a href="{% url 'exportar_extrato' %}" target="_blank" class="botao-secundario">Exportar extrato</a>
+            </div>
+        </div>
+    </form>
+    <br>
+    <br>
+
+    {% include 'partials/extrato.html' %}
+    
+</div>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+
+{% block 'title' %}
+Gerenciar
+{% endblock %}
+
+{% block 'head' %}
+<link href="{% static 'perfil/css/gerenciar.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block 'body' %}
+<br>
+<br>
+<div class="container">
+
+    {% include 'partials/messages.html' %}
+
+    <div class="row">
+        <div class="col-md-5">
+            <p class="fonte-destaque">Suas contas</p>
+            <hr>
+            <div class="contas">
+                {% for conta in contas %}
+                <div class="lista-contas-main">
+                    <span><img width="10%" src="{{conta.icone.url}}">&nbsp&nbsp{{ conta }}</span>
+
+                    <span class="total-conta positivo ">
+                        R$ {{ conta.get_valor_formatado }}&nbsp&nbsp&nbsp&nbsp
+                        <a href="{% url 'deletar_banco' conta.id %}">
+                            <img src="{% static 'perfil/img/exit.png' %}">
+                        </a>
+                    </span>
+                </div>
+                <br>
+                {% endfor %}
+
+                <br>
+            </div>
+            <hr>
+            <span class="fonte-destaque">Total:</span>
+            <span class="positivo total-conta font-destaque">R$ {{ valor_total }}</span>
+        </div>
+
+        <div class="col-md-2"></div>
+
+        <div class="col-md-5">
+            <p class="fonte-destaque">Nova conta</p>
+
+            <form action="{% url 'cadastrar_banco' %}" method="POST" enctype='multipart/form-data'>
+                {% csrf_token %}
+                <label>Apelido</label>
+                <input type="text" name="apelido" class="form-control" placeholder="">
+                <br>
+                <label>Banco</label>
+                <select name="banco" class="form-select">
+                    <option value="NU">Nubank</option>
+                </select>
+                <br>
+                <label>Tipo</label>
+                <select name="tipo" class="form-select">
+                    <option value="pf">Pessoa física</option>
+                    <option value="pj">Pessoa jurídica</option>
+                </select>
+                <br>
+                <label>Valor</label>
+                <input type="number" name="valor" class="form-control" placeholder="">
+                <br>
+                <input type="file" placeholder="Ícone" name="icone">
+                <br>
+                <br>
+                <input style="width: 100%" type="submit" class="botao-principal">
+            </form>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-md-5">
+            <span class="fonte-destaque">Nova categoria</span>
+
+            <form action="{% url 'cadastrar_categoria' %}" method="POST">
+                {% csrf_token %}
+                <label>Categoria</label>
+                <input type="text" name="categoria" class="form-control">
+                <br>
+
+                <input type="checkbox" name="essencial" value="essencial"><label class="positivo">&nbspEssencial</label>
+                <br>
+                <br>
+                <input style="width: 100%" type="submit" class="botao-principal" value="Adicionar">
+            </form>
+        </div>
+
+        <div class="col-md-2"></div>
+
+        <div class="col-md-5">
+            <div class="lista-contas-main">
+                <span class="fonte-destaque">Suas categoria</span>
+                <span class="fonte-destaque total-conta">Essencial</span>
+            </div>
+            <br>
+            <div class="contas">
+                {% for categoria in categorias %}
+                <div class="lista-contas-main">
+                    <span>{{ categoria }}</span>
+
+                    <span class="total-conta">
+                        <a href="{% url 'update_categoria' categoria.id %}">
+                            {% if categoria.essencial %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="23" viewBox="0 0 28 23"
+                                fill="none">
+                                <path
+                                    d="M9.12498 22.7792L0.0687256 13.7229L4.19581 9.59584L9.12498 14.5396L23.5333 0.116669L27.6604 4.24375L9.12498 22.7792Z"
+                                    fill="#69D2CD" />
+                            </svg>
+                            {% else %}
+                            <img src="{% static 'perfil/img/exit.png' %}">
+                            {% endif %}
+
+                        </a>
+                    </span>
+                </div>
+                <br>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
